@@ -1,33 +1,27 @@
 package main
 
 import (
-	"context"
 	"database/sql"
-	"fmt"
 
-	"github.com/dev-sota/sqlboiler-example/models"
+	"github.com/dev-sota/sqlboiler-example/handlers"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+
 	_ "github.com/go-sql-driver/mysql" // require
-	"github.com/volatiletech/sqlboiler/boil"
 )
 
 func main() {
 	dsn := "root:@tcp(127.0.0.1:3306)/sqlboiler_example"
 	db, _ := sql.Open("mysql", dsn)
 	defer db.Close()
+	handlers.SetDB(db)
 
-	ctx := context.Background()
+	e := echo.New()
 
-	u := &models.User{Name: "john"}
-	_ = u.Insert(ctx, db, boil.Infer())
-	fmt.Println(u.ID)
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-	get, _ := models.Users().One(ctx, db)
-	fmt.Println(get.ID)
+	e.POST("/users", handlers.CreateUser)
 
-	found, _ := models.FindUser(ctx, db, u.ID)
-	fmt.Println(found.ID)
-
-	found.Name = "jane"
-	rows, _ := found.Update(ctx, db, boil.Whitelist(models.UserColumns.Name))
-	fmt.Println(rows)
+	e.Logger.Fatal(e.Start("localhost:1323"))
 }
