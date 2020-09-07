@@ -12,7 +12,14 @@ import (
 
 func CreateUser(c echo.Context) error {
 	name := c.FormValue("name")
-	u := &models.User{Name: name}
+	email := c.FormValue("email")
+	password := c.FormValue("password")
+
+	u := &models.User{
+		Name:     name,
+		Email:    email,
+		Password: password,
+	}
 	_ = u.Insert(context.Background(), db, boil.Infer())
 	return c.JSON(http.StatusCreated, u)
 }

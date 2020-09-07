@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	dsn := "root:@tcp(127.0.0.1:3306)/sqlboiler_example"
+	dsn := "root:@tcp(127.0.0.1:3306)/sqlboiler_example?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 	db, _ := sql.Open("mysql", dsn)
 	defer db.Close()
 	handlers.SetDB(db)
