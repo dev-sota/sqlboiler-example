@@ -13,5 +13,5 @@ func CreateUser(c echo.Context) error {
 	name := c.FormValue("name")
 	u := &models.User{Name: name}
 	_ = u.Insert(context.Background(), db, boil.Infer())
-	return c.JSON(http.StatusOK, u)
+	return c.JSON(http.StatusCreated, u)
 }
