@@ -22,6 +22,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.POST("/users", handlers.CreateUser)
+	e.GET("/users", handlers.GetUsers)
 	e.GET("/users/:id", handlers.GetUser)
 
 	e.Logger.Fatal(e.Start("localhost:1323"))

@@ -24,6 +24,11 @@ func CreateUser(c echo.Context) error {
 	return c.JSON(http.StatusCreated, u)
 }
 
+func GetUsers(c echo.Context) error {
+	u, _ := models.Users().All(context.Background(), db)
+	return c.JSON(http.StatusOK, u)
+}
+
 func GetUser(c echo.Context) error {
 	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 	u, _ := models.FindUser(context.Background(), db, id)
